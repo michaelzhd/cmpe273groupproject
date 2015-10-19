@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	    <meta charset="UTF-8">
+	    <title>AWS EC2 Monitor</title>
+		<link rel="stylesheet" type="text/css" href="./css/themes/metro/easyui.css">
+		<link rel="stylesheet" type="text/css" href="./css/themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="./css/awsMonitor.css">
+	    <script type="text/javascript" src="./js/jquery.min.js"></script>
+	    <script type="text/javascript" src="./js/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.flot.min.js"></script>
+
+		<script>
+			function addTab(title, url){
+			    if ($('#tt').tabs('exists', title)){
+			        $('#tt').tabs('select', title);
+			    } else {
+			        var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>';
+			        $('#tt').tabs('add',{
+			            title:title,
+			            content:content,
+			            closable:true
+			        });
+			    }
+			}
+			
+			$.extend($.fn.window.defaults, {
+				onMove: function(left,top){
+					if (left<0){
+						$(this).window('move',{
+							left:0
+						});;
+					}
+					if (top < 0){
+						$(this).window('move',{
+							top:0
+						});;
+					}
+				}
+			});
+		</script>
+
+
+</head>
+<body>
+    
+
+	<div  class="easyui-layout" fit="true">
+        <div region="west" split="true" style="width:150px;padding:30px 0 10px 0;">
+            <ul class="easyui-tree">
+                <li>
+                    <span>Library</span>
+                    <ul>
+                        <li><span><a href="#"  onclick="addTab('jeasyui','http://jeasyui.com/')">easyui</a></span></li>
+                        <li><span><a href="#" class="easyui-linkbutton" onclick="addTab('jquery','http://jquery.com/')">jQuery</a></span></li>
+                        <li><span>Picture</span></li>
+                        <li><span>Database</span></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div region="center" border="false" border="false">
+            <div id="tt" class="easyui-tabs" fit="true">
+                <div title="Summary" style="padding:10px;">
+					    <div style="position:relative;width:100%;height:100%;border:1px solid #ccc;overflow:auto; " >
+					        <div id="cpu" class="easyui-window plot-windows" data-options="title:'CPU',inline:true, left:10,top:10" style="width:350px;height:250px;padding:10px">
+
+					            CPU percentage in real time.
+
+					        </div>
+					        <div id="memory" class="easyui-window plot-windows" data-options="title:'Memory',inline:true, top:10,left:370" style="width:350px;height:250px;padding:10px">
+
+					            Memory percentage in real time.
+
+					        </div>
+					        <div id="network" class="easyui-window plot-windows" data-options="title:'Network',inline:true,top:10,left:730" style="width:350px;height:250px;padding:10px">
+
+					            Network percentage in real time.
+
+					        </div>
+							
+					        <div id="io" class="easyui-window plot-windows" data-options="title:'I/O',inline:true, top:280,left:10," style="width:350px;height:250px;padding:10px">
+
+					            I/O percentage in real time.
+
+					        </div>
+					        <div id="resource" class="easyui-window plot-windows" data-options="title:'Resource',inline:true, top:280,left:370" style="width:350px;height:250px;padding:10px">
+
+					            Resource percentage in real time.
+
+					        </div>
+					        <div id="network" class="easyui-window plot-windows" data-options="title:'Warnning',inline:true,top:280,left:730" style="width:350px;height:250px;padding:10px">
+
+					            Warnning percentage in real time.
+
+					        </div>
+					    </div>
+                    
+                </div>
+                <div title="Contacts" data-options="closable:true" style="padding:10px;">
+                    No contact data.
+                </div>
+            </div>
+        </div>
+        <div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+
+        </div>
+    </div>
+</body>
