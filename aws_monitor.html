@@ -39,15 +39,92 @@
 				}
 			});
 		</script>
+		<script>
+		$(function() {};
 
+			var options = {
+				lines: {
+					show: true
+				},
+				points: {
+					show: true
+				},
+				xaxis: {
+					tickDecimals: 0,
+					tickSize: 1
+				}
+			};
+
+			var data = [];
+
+			$.plot("#cpu", data, options);
+
+			// Fetch one series, adding to what we already have
+
+			var alreadyFetched = {};
+
+
+
+			// Initiate a recurring data update
+
+			$("document").ready(function () {
+
+				data = [];
+				alreadyFetched = {};
+
+				$.plot("#cpu", data, options);
+
+				var iteration = 0;
+
+				function fetchData() {
+
+					++iteration;
+
+					function onDataReceived(series) {
+
+						// Load all the data in one pass; if we only got partial
+						// data we could merge it with what we already have.
+
+						data = [ series ];
+						$.plot("#cpu", data, options);
+					}
+
+					// Normally we call the same URL - a script connected to a
+					// database - but in this case we only have static example
+					// files, so we need to modify the URL.
+
+					$.ajax({
+						url: "data-eu-gdp-growth-" + iteration + ".json",
+						type: "GET",
+						dataType: "json",
+						success: onDataReceived
+					});
+
+					if (iteration < 100) {
+						setTimeout(fetchData, 500);
+					} else {
+						data = [];
+						alreadyFetched = {};
+					}
+				}
+
+				setTimeout(fetchData, 1000);
+			});
+
+
+			// Add the Flot version string to the footer
+
+			// $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+		});
+</script>
 
 </head>
 <body>
     
 
 	<div  class="easyui-layout" fit="true">
-        <div region="west" split="true" style="width:150px;padding:30px 0 10px 0;">
-            <ul class="easyui-tree">
+        <div region="west" split="true" style="width:0px;padding:0px 0 10px 0;">
+            <!-- <ul class="easyui-tree">
                 <li>
                     <span>Library</span>
                     <ul>
@@ -57,42 +134,44 @@
                         <li><span>Database</span></li>
                     </ul>
                 </li>
-            </ul>
+            </ul> -->
         </div>
         <div region="center" border="false" border="false">
             <div id="tt" class="easyui-tabs" fit="true">
                 <div title="Summary" style="padding:10px;">
 					    <div style="position:relative;width:100%;height:100%;border:1px solid #ccc;overflow:auto; " >
-					        <div id="cpu" class="easyui-window plot-windows" data-options="title:'CPU',inline:true, left:10,top:10" style="width:350px;height:250px;padding:10px">
+					        <div class="easyui-window plot-windows" data-options="title:'CPU',inline:true, left:10,top:10" style="width:350px;height:250px;padding:10px">
 
+								<div id="cpu">
 					            CPU percentage in real time.
+								</div>
 
 					        </div>
-					        <div id="memory" class="easyui-window plot-windows" data-options="title:'Memory',inline:true, top:10,left:370" style="width:350px;height:250px;padding:10px">
-
+					        <div class="easyui-window plot-windows" data-options="title:'Memory',inline:true, top:10,left:370" style="width:350px;height:250px;padding:10px">
+							<div id="memory">
 					            Memory percentage in real time.
-
+							</div>
 					        </div>
-					        <div id="network" class="easyui-window plot-windows" data-options="title:'Network',inline:true,top:10,left:730" style="width:350px;height:250px;padding:10px">
-
+					        <div class="easyui-window plot-windows" data-options="title:'Network',inline:true,top:10,left:730" style="width:350px;height:250px;padding:10px">
+								<div id="network">
 					            Network percentage in real time.
-
+							</div>
 					        </div>
 							
-					        <div id="io" class="easyui-window plot-windows" data-options="title:'I/O',inline:true, top:280,left:10," style="width:350px;height:250px;padding:10px">
-
+					        <div class="easyui-window plot-windows" data-options="title:'I/O',inline:true, top:280,left:10," style="width:350px;height:250px;padding:10px">
+								<div id="io">
 					            I/O percentage in real time.
-
+							</div>
 					        </div>
-					        <div id="resource" class="easyui-window plot-windows" data-options="title:'Resource',inline:true, top:280,left:370" style="width:350px;height:250px;padding:10px">
-
+					        <div class="easyui-window plot-windows" data-options="title:'Resource',inline:true, top:280,left:370" style="width:350px;height:250px;padding:10px">
+								<div id="resource">
 					            Resource percentage in real time.
-
+							</div>
 					        </div>
-					        <div id="network" class="easyui-window plot-windows" data-options="title:'Warnning',inline:true,top:280,left:730" style="width:350px;height:250px;padding:10px">
-
+					        <div class="easyui-window plot-windows" data-options="title:'Warnning',inline:true,top:280,left:730" style="width:350px;height:250px;padding:10px">
+								<div id="network">
 					            Warnning percentage in real time.
-
+							</div>
 					        </div>
 					    </div>
                     
