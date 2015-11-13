@@ -40,81 +40,124 @@
 			});
 		</script>
 		<script>
-			var d1 = [];
-			var d2 = [];
-			// var x = 10;
-			var read = 0;
-			
-			
 			$(document).ready(function(){
-				drawPlot();
-				
-				// var d1 = [];
-				// var d2 = [];
-
-				function drawPlot(){	
+				alert("2");
+				var options = {
+					lines: {
+						show: true
+					},
+					points: {
+						show: true
+					},
 					
-					// var d1 = [];
-					// var d2 = [];
-					// x += 10;
-					read += 1;
-					if(read > 100) {
-						read -= 80;
-					} else if (read < 0) {
-						read = 0;
-					}
-					var date = new Date();
-					var x = date.getTime();
-					// for (var i = 30; i > 0; i -= 1) {
-					    d1.push([x, read+10]);
-					    d2.push([x, 70]);
-					// }
-					
-					if (d1.length > 60){
-						
-						d1.shift();
-						d2.shift();
-					}
-					
-					// var currentSecond = parseInt(date.getSeconds());
-// 					d1.push([currentSecond, 30]);
-// 					d1.push([currentSecond, 70]);
+					xaxis:  { position: "top",min:0,max:10 } ,
+					yaxis: { position: "right", min:0, max:100 } 
+				};
 
+				var data = [[1,10],
+		[2,11],
+		[3,9],
+		[4,5],
+		[5,15]];
 
-				$.plot($("#cpu"), [d1,d2], {
-				    grid: {
-				        borderWidth: 1,
-				        minBorderMargin: 5,
-				        labelMargin: 2,
-				        // backgroundColor: {
-				        //     colors: ["#fff", "#e4f4f4"]
-				        // }//,
-				        margin: {
-				            top: 1,
-				            bottom: 5,
-				            left: 2
-				        }
-				    },
-				    yaxis: {
-				        labelWidth: 30,
-						max:100
-				    },
-				    xaxis: {
-				        labelHeight: 30
-				    },
-				    legend: {
-				        show: true
-				    }
-				});
-				// defining the style of axis and their coordinate labels
-				var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>").text("Elapsed Time").appendTo($('#cpu'));
-				var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>").text("Percentage").appendTo($('#cpu'));
-				yaxisLabel.css("margin-top", yaxisLabel.width() / 2 - 20);
-				setTimeout(drawPlot, 2000);
-			}
+				$.plot($("#cpu"), data, options);
 			});
 		</script>
-
+	// 	<script>
+	// 	$(document).ready(function(){
+	// 		alert("1");
+	// 	});
+	// 		var options = {
+	// 			lines: {
+	// 				show: true
+	// 			},
+	// 			points: {
+	// 				show: true
+	// 			},
+	// 			xaxis: {
+	// 				max:10
+	// 			}
+	// 			yaxis:{
+	// 				max:100
+	// 			}
+	// 		};
+	//
+	// 		var data = [[1,10],
+	// [2,11],
+	// [3,9],
+	// [4,5],
+	// [5,15]];
+	//
+	// 		$.plot($("#cpu"), data, options);
+	// 	});
+	// 	</script>
+	//
+	// 		// Fetch one series, adding to what we already have
+	//
+	// 		var alreadyFetched = {};
+	//
+	//
+	//
+	// 		// Initiate a recurring data update
+	//
+	// 		$("document").ready(function () {
+	//
+	// 			data = [[1,10],
+	// [2,11],
+	// [3,9],
+	// [4,5],
+	// [5,15]];
+	// 			alreadyFetched = {};
+	//
+	// 			$.plot($("#cpu"), data, options);
+	//
+	// 			var iteration = 0;
+	//
+	// 			function fetchData() {
+	//
+	// 				++iteration;
+	//
+	// 				function onDataReceived(series) {
+	//
+	// 					// Load all the data in one pass; if we only got partial
+	// 					// data we could merge it with what we already have.
+	//
+	// 					data = [ series ];
+	// 					$.plot($("#cpu"), data, options);
+	// 				}
+	//
+	// 				// Normally we call the same URL - a script connected to a
+	// 				// database - but in this case we only have static example
+	// 				// files, so we need to modify the URL.
+	//
+	// 				$.ajax({
+	// 					url: "./cpu.json",
+	// 					type: "GET",
+	// 					dataType: "json",
+	// 					success: onDataReceived
+	// 				});
+	//
+	// 				if (iteration < 100) {
+	// 					setTimeout(fetchData, 500);
+	// 				} else {
+	// 					data = [[1,10],
+	// [2,11],
+	// [3,9],
+	// [4,5],
+	// [5,15]];
+	// 					alreadyFetched = {};
+	// 				}
+	// 			}
+	//
+	// 			setTimeout(fetchData, 1000);
+	// 		});
+	//
+	//
+	// 		// Add the Flot version string to the footer
+	//
+	// 		// $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+	// 	});
+// </script>
 
 </head>
 <body>
@@ -138,11 +181,10 @@
             <div id="tt" class="easyui-tabs" fit="true">
                 <div title="Summary" style="padding:10px;">
 					    <div style="position:relative;width:100%;height:100%;border:1px solid #ccc;overflow:auto; " >
-					        <div class="easyui-window plot-windows" data-options="title:'CPU',inline:true, left:10,top:10" style="width:350px;height:250px;padding:0px">
+					        <div class="easyui-window plot-windows" data-options="title:'CPU',inline:true, left:10,top:10" style="width:350px;height:250px;padding:10px">
 
-								<div id="cpu" style="width:310px;height:220px;">
-					            <!-- CPU percentage in real time. -->
-								
+								<div id="cpu">
+					            CPU percentage in real time.
 								</div>
 
 					        </div>
