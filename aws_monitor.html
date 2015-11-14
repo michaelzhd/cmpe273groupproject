@@ -45,14 +45,13 @@
 		<script>
 
 			$(document).ready(function(){
-				plotMerit("cpu",10, 70);
-				plotMerit("memory", 20, 90);
-				plotMerit("network", 20, 90);
-				plotMerit("io", 20, 90);
-				plotMerit("resource", 20, 90);
-				plotMerit("network", 20, 90);
+				plotMerit("cpu",10, 70, 100, "Percentage");
+				plotMerit("memory", 200, 800, 1000,"MB");
+				plotMerit("network", 100, 900, 1000, "MB/S");
+				plotMerit("io", 200, 5000,10000,"MB/S");
+				plotMerit("resource", 50, 700,1000,"Visits/Second");
 			
-			function plotMerit(merit, seed, alarmLevel){
+			function plotMerit(merit, seed, alarmLevel, maxY, unitY){
 				var X = [];
 				var Y = [];
 				var secondsPast = 0;
@@ -62,9 +61,9 @@
 
 				function drawPlot(){
 
-					read += 1;
-					if(read > 80) {
-						read -= 30;
+					read *= 1.1;
+					if(read > 0.8 * maxY) {
+						read *= 0.3;
 					} else if (read < 0) {
 						read = 0;
 					}
@@ -94,7 +93,8 @@
 				    },
 				    yaxis: {
 				        labelWidth: 30,
-						max:100
+						max:maxY,
+						min:0
 				    },
 				    xaxis: {
 				        labelHeight: 30,
@@ -106,7 +106,7 @@
 				});
 				// defining the style of axis and their coordinate labels
 				var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>").text("Elapsed Time").appendTo($('#' + merit));
-				var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>").text("Percentage").appendTo($('#' + merit));
+				var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>").text(unitY).appendTo($('#' + merit));
 				yaxisLabel.css("margin-top",yaxisLabel.width() / 2 - 20);
 				setTimeout(drawPlot, 1000);
 			}
@@ -145,30 +145,30 @@
 								</div>
 
 					        </div>
-					        <div class="easyui-window plot-windows" data-options="title:'Memory',inline:true, top:10,left:370" style="width:350px;height:250px;padding:10px">
+					        <div class="easyui-window plot-windows" data-options="title:'Memory',inline:true, top:10,left:370" style="width:350px;height:250px;padding:0px">
 							<div id="memory" style="width:310px;height:220px;">
 					            <!-- Memory percentage in real time. -->
 							</div>
 					        </div>
-					        <div class="easyui-window plot-windows" data-options="title:'Network',inline:true,top:10,left:730" style="width:350px;height:250px;padding:10px">
+					        <div class="easyui-window plot-windows" data-options="title:'Network',inline:true,top:10,left:730" style="width:350px;height:250px;padding:0px">
 								<div id="network" style="width:310px;height:220px;">
 					            <!-- Network percentage in real time. -->
 							</div>
 					        </div>
 							
-					        <div class="easyui-window plot-windows" data-options="title:'I/O',inline:true, top:280,left:10," style="width:350px;height:250px;padding:10px">
+					        <div class="easyui-window plot-windows" data-options="title:'I/O',inline:true, top:280,left:10," style="width:350px;height:250px;padding:0px">
 								<div id="io" style="width:310px;height:220px;">
 					            <!-- I/O percentage in real time. -->
 							</div>
 					        </div>
-					        <div class="easyui-window plot-windows" data-options="title:'Resource',inline:true, top:280,left:370" style="width:350px;height:250px;padding:10px">
+					        <div class="easyui-window plot-windows" data-options="title:'Resource',inline:true, top:280,left:370" style="width:350px;height:250px;padding:0px">
 								<div id="resource" style="width:310px;height:220px;">
 					            <!-- Resource percentage in real time. -->
 							</div>
 					        </div>
 					        <div class="easyui-window plot-windows" data-options="title:'Warnning',inline:true,top:280,left:730" style="width:350px;height:250px;padding:10px">
-								<div id="network" style="width:310px;height:220px;">
-					            <!-- Warnning percentage in real time. -->
+								<div id="warning" style="width:310px;height:220px;">
+					            Currently no warnings. Everything looks fine.
 							</div>
 					        </div>
 					    </div>
