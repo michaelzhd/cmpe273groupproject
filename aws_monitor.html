@@ -9,7 +9,7 @@
 	    <script type="text/javascript" src="./js/jquery.min.js"></script>
 	    <script type="text/javascript" src="./js/jquery.easyui.min.js"></script>
 		<script type="text/javascript" src="./js/jquery.flot.min.js"></script>
-		<script type="text/javascript" src="./js/cpu.js"></script>
+
 		
 
 		<script>
@@ -45,28 +45,48 @@
 		<script>
 
 			$(document).ready(function(){
-				plotMerit("cpu",10, 70, 100, "Percentage");
+
+				
+				
+				plotMerit("cpu",10, 70, 100, "Percentage","merit.json");
 				plotMerit("memory", 200, 800, 1000,"MB");
 				plotMerit("network", 100, 900, 1000, "MB/S");
 				plotMerit("io", 200, 5000,10000,"MB/S");
 				plotMerit("resource", 50, 700,1000,"Visits/Second");
 			
-			function plotMerit(merit, seed, alarmLevel, maxY, unitY){
+			function plotMerit(merit, seed, alarmLevel, maxY, unitY, jsonURL){
 				var X = [];
 				var Y = [];
 				var secondsPast = 0;
-				var read = seed;
+				// var read = seed;
+				var read = 0;
 
 				drawPlot();
 
 				function drawPlot(){
-
+					
+					$.ajax({
+						url:jsonURL,
+						dataType:"json",
+						cache:false,
+						type:"get",
+						success: function(data) {
+							var rawRead = parseInt(data.merit);
+							if (!isNaN(rawRead)) {
+								read = rawRead;
+							}
+							// console.log(read);
+						}
+					});
+					console.log(read);
 					read *= 1.1;
 					if(read > 0.8 * maxY) {
 						read *= 0.3;
 					} else if (read < 0) {
 						read = 0;
 					}
+					
+					
 					secondsPast += 1;
 					X.push([secondsPast, read+10]);
 					Y.push([secondsPast, alarmLevel]);
