@@ -9,6 +9,8 @@
 	    <script type="text/javascript" src="./js/jquery.min.js"></script>
 	    <script type="text/javascript" src="./js/jquery.easyui.min.js"></script>
 		<script type="text/javascript" src="./js/jquery.flot.min.js"></script>
+		<script type="text/javascript" src="./js/cpu.js"></script>
+		
 
 		<script>
 			function addTab(title, url){
@@ -39,49 +41,44 @@
 				}
 			});
 		</script>
-		<script>
-			var d1 = [];
-			var d2 = [];
-			// var x = 10;
-			var read = 0;
-			
-			
-			$(document).ready(function(){
-				drawPlot();
-				
-				// var d1 = [];
-				// var d2 = [];
 
-				function drawPlot(){	
-					
-					// var d1 = [];
-					// var d2 = [];
-					// x += 10;
+		<script>
+
+			$(document).ready(function(){
+				plotMerit("cpu",10, 70);
+				plotMerit("memory", 20, 90);
+				plotMerit("network", 20, 90);
+				plotMerit("io", 20, 90);
+				plotMerit("resource", 20, 90);
+				plotMerit("network", 20, 90);
+			
+			function plotMerit(merit, seed, alarmLevel){
+				var X = [];
+				var Y = [];
+				var secondsPast = 0;
+				var read = seed;
+
+				drawPlot();
+
+				function drawPlot(){
+
 					read += 1;
-					if(read > 100) {
-						read -= 80;
+					if(read > 80) {
+						read -= 30;
 					} else if (read < 0) {
 						read = 0;
 					}
-					var date = new Date();
-					var x = date.getTime();
-					// for (var i = 30; i > 0; i -= 1) {
-					    d1.push([x, read+10]);
-					    d2.push([x, 70]);
-					// }
-					
-					if (d1.length > 60){
-						
-						d1.shift();
-						d2.shift();
+					secondsPast += 1;
+					X.push([secondsPast, read+10]);
+					Y.push([secondsPast, alarmLevel]);
+
+					if (X.length > 60){
+
+						X.shift();
+						Y.shift();
 					}
-					
-					// var currentSecond = parseInt(date.getSeconds());
-// 					d1.push([currentSecond, 30]);
-// 					d1.push([currentSecond, 70]);
 
-
-				$.plot($("#cpu"), [d1,d2], {
+				$.plot($("#" +merit), [X,Y], {
 				    grid: {
 				        borderWidth: 1,
 				        minBorderMargin: 5,
@@ -100,20 +97,22 @@
 						max:100
 				    },
 				    xaxis: {
-				        labelHeight: 30
+				        labelHeight: 30,
 				    },
 				    legend: {
 				        show: true
-				    }
+				    },
+					colors:["green","red"]
 				});
 				// defining the style of axis and their coordinate labels
-				var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>").text("Elapsed Time").appendTo($('#cpu'));
-				var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>").text("Percentage").appendTo($('#cpu'));
-				yaxisLabel.css("margin-top", yaxisLabel.width() / 2 - 20);
-				setTimeout(drawPlot, 2000);
+				var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>").text("Elapsed Time").appendTo($('#' + merit));
+				var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>").text("Percentage").appendTo($('#' + merit));
+				yaxisLabel.css("margin-top",yaxisLabel.width() / 2 - 20);
+				setTimeout(drawPlot, 1000);
 			}
+		}
 			});
-		</script>
+		 </script>
 
 
 </head>
@@ -147,29 +146,29 @@
 
 					        </div>
 					        <div class="easyui-window plot-windows" data-options="title:'Memory',inline:true, top:10,left:370" style="width:350px;height:250px;padding:10px">
-							<div id="memory">
-					            Memory percentage in real time.
+							<div id="memory" style="width:310px;height:220px;">
+					            <!-- Memory percentage in real time. -->
 							</div>
 					        </div>
 					        <div class="easyui-window plot-windows" data-options="title:'Network',inline:true,top:10,left:730" style="width:350px;height:250px;padding:10px">
-								<div id="network">
-					            Network percentage in real time.
+								<div id="network" style="width:310px;height:220px;">
+					            <!-- Network percentage in real time. -->
 							</div>
 					        </div>
 							
 					        <div class="easyui-window plot-windows" data-options="title:'I/O',inline:true, top:280,left:10," style="width:350px;height:250px;padding:10px">
-								<div id="io">
-					            I/O percentage in real time.
+								<div id="io" style="width:310px;height:220px;">
+					            <!-- I/O percentage in real time. -->
 							</div>
 					        </div>
 					        <div class="easyui-window plot-windows" data-options="title:'Resource',inline:true, top:280,left:370" style="width:350px;height:250px;padding:10px">
-								<div id="resource">
-					            Resource percentage in real time.
+								<div id="resource" style="width:310px;height:220px;">
+					            <!-- Resource percentage in real time. -->
 							</div>
 					        </div>
 					        <div class="easyui-window plot-windows" data-options="title:'Warnning',inline:true,top:280,left:730" style="width:350px;height:250px;padding:10px">
-								<div id="network">
-					            Warnning percentage in real time.
+								<div id="network" style="width:310px;height:220px;">
+					            <!-- Warnning percentage in real time. -->
 							</div>
 					        </div>
 					    </div>
